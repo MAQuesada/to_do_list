@@ -1,0 +1,42 @@
+# Vercel ignore file
+# Files and directories to exclude from deployment
+
+# Virtual environment
+.venv/
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+
+# Environment files
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+
+# IDE files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Git
+.git/
+.gitignore
+
+# Documentation
+README.md
+
+# Lock files (Vercel will use pyproject.toml)
+uv.lock
+
+# Test files
+tests/
+test_*.py
+*_test.py
+
+# Logs
+*.log
+

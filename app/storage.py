@@ -12,7 +12,7 @@ import os
 from dotenv import load_dotenv
 import bcrypt
 from datetime import datetime
-from typing import Optional, List, Dict
+from typing import List, Dict
 
 load_dotenv()
 
@@ -26,13 +26,23 @@ class Storage:
         self.client = None
         self.db = None
         self.users_collection = None
+        self._connected = False
         self.connect()
 
     def connect(self):
         """Establish connection to MongoDB."""
+        if self._connected and self.client is not None:
+            return
+            
         try:
             # Create a new client and connect to the server
-            self.client = MongoClient(self.mongodb_uri, server_api=ServerApi("1"))
+            # Use connectTimeoutMS for serverless environments
+            self.client = MongoClient(
+                self.mongodb_uri, 
+                server_api=ServerApi("1"),
+                connectTimeoutMS=5000,
+                serverSelectionTimeoutMS=5000
+            )
 
             # Send a ping to confirm a successful connection
             self.client.admin.command("ping")
@@ -42,11 +52,18 @@ class Storage:
             self.db = self.client.todo_app
             self.users_collection = self.db.users
 
-            # Create unique index on username
-            self.users_collection.create_index("username", unique=True)
+            # Create unique index on username (with check for existing index)
+            try:
+                self.users_collection.create_index("username", unique=True)
+            except Exception:
+                # Index might already exist, which is fine
+                pass
+
+            self._connected = True
 
         except ConnectionFailure as e:
             print(f"Failed to connect to MongoDB: {e}")
+            self._connected = False
             raise
 
     def close(self):

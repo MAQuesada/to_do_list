@@ -25,7 +25,7 @@ A robust to-do list application built with Flask, Jinja2, and MongoDB. Features 
 1. Clone the repository:
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/MAQuesada/to_do_list.git
 cd to_do_list
 ```
 
@@ -78,6 +78,8 @@ The application will be available at `http://127.0.0.1:5000` by default.
 
 ```
 to_do_list/
+├── api/
+│   └── index.py        # Vercel serverless function entry point
 ├── app/
 │   └── storage.py      # MongoDB storage layer
 ├── templates/
@@ -88,10 +90,34 @@ to_do_list/
 ├── main.py             # Flask application entry point
 ├── pyproject.toml      # Project dependencies and configuration
 ├── uv.lock             # Lock file for dependencies
+├── vercel.json         # Vercel deployment configuration
 ├── example.env         # Example environment variables
 ├── .gitignore          # Git ignore rules
 └── README.md           # This file
 ```
+
+## Deployment
+
+### Deploying to Vercel
+
+This application is configured to deploy to Vercel with minimal setup.
+
+- **Deploy via GitHub**:
+  - Go to [vercel.com](https://vercel.com)
+  - Click "New Project"
+  - Import your GitHub repository
+  - Vercel will auto-detect the Python project
+
+- **Configure Environment Variables**:
+   In Vercel dashboard, go to Project Settings → Environment Variables and add:
+  - `SECRET_KEY`: A secure random string
+  - `MONGODB_URI`: Your MongoDB Atlas connection string
+
+- **Deploy**:
+  - Click "Deploy" and wait for the build to complete
+  - Make sure to add `0.0.0.0/0` to allow all IPs (or specific Vercel IPs)
+
+Your app will be live at `https://your-project.vercel.app`
 
 ## Architecture
 
